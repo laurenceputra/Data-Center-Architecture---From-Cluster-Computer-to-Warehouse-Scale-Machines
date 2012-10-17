@@ -1,0 +1,44 @@
+\documentclass[]{article}
+\usepackage[hmargin=30mm, vmargin=30mm]{geometry}
+
+\begin{document}
+
+\title{Data Center Architecture\\From Cluster Computer to Warehouse Scale Machines}
+\author{Laurence Putra Franslay (U096833E)}
+\date{15th Oct 2012}
+\maketitle
+
+\section{Introduction}
+Over the past 10 years, the internet has evolved significantly, and widespread usage of web-apps and web services has increased the amount of computational power required to run these applications dramatically. \\
+
+While 10 years ago we used to store documents on our computers, occasionally uploading them to send them over the limited email storage, these days, one can simply upload them onto Google Drive or Skydrive, which gives you 5GB and 7GB of storage space respectively for this purpose, and even edit the copy that is online, or in today's terms, in the "cloud". \\
+
+In addition to that, the explosion of the number of internet users as compared to 10 years ago has led to web services needing to handle more users, most notably Facebook and Google, and that has forced a rethink on how data and computational power should be organised, especially now that individual companies are using multiple data centers all over the world. \\
+
+\section{Hardware Changes}
+In traditional data centers, as with most other resources with heavy computational demands, one of the key measurements that affect decision making is power. More often than not, one of the biggest challenges when designing a data center was providing enough power to all the servers on all the racks. \\
+
+However, in recent years, this has changed. With the switch over to warehouse scale machines, now that all the computational power belongs to a single organisation, instead of being solely focused on getting sufficient power to power all the servers, data center designers now faced a bigger problem: How to fit a large amount of computation power, while keeping overheads low, where overheads include things like power consumption, space occupied, cost, and network latency. \\
+
+Since warehouse scale machines contains a single application, inter server connectivity is especially important, since different servers may be generating some result that contributes to the final desired result. First, assume that we have a job that take 100 units of time to process, and this job is embarrassingly parallel. Without more information, any perfectly sane person would propose that one runs the job using every single core in the warehouse scale machine. However, there's a problem with that. All the cores/processes will have to communicate to generate the final result, be it a webpage to serve to the user or the result of a complex computation. And hence it wouldn't make sense to parallelize the task to the point that network communication take up a significantly large overhead. \\
+
+Another thing that has changed in recent years is the issue of redundancy. Previously, servers used to have RAID configurations, allowing the hardware to handle failures, as well as having redundant power supplies. However, in recent years, with commodity computers having better performance/cost, companies have begun to handle these failures and errors from within the software, rather than using expensive hardware to circumvent failures, and use these cheaper hardware.  A secondary advantage of using cheaper hardware is that the power consumption has decreased as well. \\
+
+\section{Software Changes}
+
+Within the software section, there has also been a shift into distributed systems. While systems of old use to reside on a single robust piece of hardware, systems of late are split across multiple machines, handling errors and failures without bringing down the system, while providing better performance. Below are 2 of the more widely used methods to achieve this end.  \\
+
+\subsection{Replication}
+
+Replication, in human terms, stores the data multiple times on multiple machines and pray that not all the machines in the replica set die at the same time. It is one of the most common ways of scaling up and ensuring availability. For replica sets, most of them generally work on the eventually correct model, where writes can only go on the master node, while reads can go on any of the nodes, and the data is synced once every fixed about of time. This not only improves availability but performance as the reads can now be load balanced on any of the non-master nodes, and more can be added if necessary. \\
+
+\subsection{Sharding}
+
+Sharding involves splitting the data up based on a predefined shard key, such that data within each range is stored on a different server or replica set. In sharding, data is generally stored in chunks with a maximum size, and will split into 2 chunks when the maximum size is hit. Multiple chunk are then stored on each server. This promotes availability as recovery of smaller chunks of data is alot faster than recovering a huge data set. In addition, when there is downtime, only certain shards are affected. Not only that, when there are tasks to run, as different sets of data are stored on different servers, the computational power required to compute is the sum of all the servers used to respond to the query. \\
+
+\section{Conclusion}
+
+The services running in data centers have changed over the past 10 years. While in the past, people tend to purchase top tier hardware to improve performance, with the scale of current services, software has moved to be more distributed. And as a result of this shift to distributed systems, companies can now purchase parts with less absolute performance individually, but more performance for the same amount of money. In addition to that, failure handling has now been outsourced to the software, and instead of relying on expensive hardware to handle failures, they now use concepts like replication and sharding to maximise availability. \\
+
+
+\end{document}
